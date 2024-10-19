@@ -18,7 +18,7 @@ const Celebration = () => {
   return (
     <div className="px-8 content-center align-middle gap-3">
       <div className="-">
-      <h1 className="text-4xl bg-text-gradient text-transparent bg-clip-text font-bold text-center text-shadow-custom">
+      <h1 className="text-4xl bg-text-gradient text-transparent bg-clip-text font-bold text-center text-shadow-custom mb-3">
         CHÚC MỪNG EM
       </h1>
       <h2 className="text-3xl bg-text-gradient text-transparent bg-clip-text font-bold text-center text-shadow-custom">

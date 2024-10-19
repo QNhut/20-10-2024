@@ -17,10 +17,10 @@ const MainPage = () => {
   const sectionCelebrationRef = useRef(null);
   const sectionApologizeRef = useRef(null);
 
+  const touchStartRef = useRef(null);
+
   useEffect(() => {
     const handleScroll = (event) => {
-      event.preventDefault();
-
       if (isScrolling) return;
 
       setIsScrolling(true);
@@ -35,8 +35,37 @@ const MainPage = () => {
       setTimeout(() => setIsScrolling(false), 1000);
     };
 
+    const handleTouchStart = (event) => {
+      touchStartRef.current = event.touches[0].clientY;
+    };
+
+    const handleTouchEnd = (event) => {
+      if (isScrolling) return;
+
+      const touchEndY = event.changedTouches[0].clientY;
+      const deltaY = touchStartRef.current - touchEndY;
+
+      setIsScrolling(true);
+      if (deltaY > 0 && activeSection === SECTION.CELEBRATION) {
+        setActiveSection(SECTION.APOLOGIZE);
+        sectionApologizeRef.current.scrollIntoView({ behavior: "smooth" });
+      } else if (deltaY < 0 && activeSection === SECTION.APOLOGIZE) {
+        setActiveSection(SECTION.CELEBRATION);
+        sectionCelebrationRef.current.scrollIntoView({ behavior: "smooth" });
+      }
+
+      setTimeout(() => setIsScrolling(false), 1000);
+    };
+
     window.addEventListener("wheel", handleScroll, { passive: false });
-    return () => window.removeEventListener("wheel", handleScroll);
+    window.addEventListener("touchstart", handleTouchStart);
+    window.addEventListener("touchend", handleTouchEnd);
+
+    return () => {
+      window.removeEventListener("wheel", handleScroll);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchend", handleTouchEnd);
+    };
   }, [activeSection, isScrolling]);
 
   return (
