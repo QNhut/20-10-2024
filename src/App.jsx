@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Celebration from "./components/Celebration";
 import ReactConfetti from "react-confetti";
 import { useWindowSize } from "@uidotdev/usehooks";
@@ -13,50 +13,55 @@ const MainPage = () => {
   const { height, width } = useWindowSize();
 
   const [activeSection, setActiveSection] = useState(SECTION.CELEBRATION);
-  const [isScrolling, setIsScrolling] = useState(false);
   const sectionCelebrationRef = useRef(null);
   const sectionApologizeRef = useRef(null);
+  const isScrollingRef = useRef(false);
+  const touchStartRef = useRef(0);
 
-  const touchStartRef = useRef(null);
+  const handleScroll = useCallback((event) => {
+    if (isScrollingRef.current) return;
+
+    isScrollingRef.current = true;
+
+    if (event.deltaY > 0 && activeSection === SECTION.CELEBRATION) {
+      setActiveSection(SECTION.APOLOGIZE);
+      sectionApologizeRef.current.scrollIntoView({ behavior: "smooth" });
+    } else if (event.deltaY < 0 && activeSection === SECTION.APOLOGIZE) {
+      setActiveSection(SECTION.CELEBRATION);
+      sectionCelebrationRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+
+    requestAnimationFrame(() => {
+      isScrollingRef.current = false;
+    });
+  }, [activeSection]);
+
+  const handleTouchStart = useCallback((event) => {
+    isScrollingRef.current = false; // reset when touch starts
+    touchStartRef.current = event.touches[0].clientY;
+  }, []);
+
+  const handleTouchEnd = useCallback((event) => {
+    if (isScrollingRef.current) return;
+
+    const touchEndY = event.changedTouches[0].clientY;
+    const deltaY = touchStartRef.current - touchEndY;
+
+    isScrollingRef.current = true;
+    if (deltaY > 0 && activeSection === SECTION.CELEBRATION) {
+      setActiveSection(SECTION.APOLOGIZE);
+      sectionApologizeRef.current.scrollIntoView({ behavior: "smooth" });
+    } else if (deltaY < 0 && activeSection === SECTION.APOLOGIZE) {
+      setActiveSection(SECTION.CELEBRATION);
+      sectionCelebrationRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+
+    requestAnimationFrame(() => {
+      isScrollingRef.current = false;
+    });
+  }, [activeSection]);
 
   useEffect(() => {
-    const handleScroll = (event) => {
-      if (isScrolling) return;
-
-      setIsScrolling(true);
-      if (event.deltaY > 0 && activeSection === SECTION.CELEBRATION) {
-        setActiveSection(SECTION.APOLOGIZE);
-        sectionApologizeRef.current.scrollIntoView({ behavior: "smooth" });
-      } else if (event.deltaY < 0 && activeSection === SECTION.APOLOGIZE) {
-        setActiveSection(SECTION.CELEBRATION);
-        sectionCelebrationRef.current.scrollIntoView({ behavior: "smooth" });
-      }
-
-      setTimeout(() => setIsScrolling(false), 1000);
-    };
-
-    const handleTouchStart = (event) => {
-      touchStartRef.current = event.touches[0].clientY;
-    };
-
-    const handleTouchEnd = (event) => {
-      if (isScrolling) return;
-
-      const touchEndY = event.changedTouches[0].clientY;
-      const deltaY = touchStartRef.current - touchEndY;
-
-      setIsScrolling(true);
-      if (deltaY > 0 && activeSection === SECTION.CELEBRATION) {
-        setActiveSection(SECTION.APOLOGIZE);
-        sectionApologizeRef.current.scrollIntoView({ behavior: "smooth" });
-      } else if (deltaY < 0 && activeSection === SECTION.APOLOGIZE) {
-        setActiveSection(SECTION.CELEBRATION);
-        sectionCelebrationRef.current.scrollIntoView({ behavior: "smooth" });
-      }
-
-      setTimeout(() => setIsScrolling(false), 1000);
-    };
-
     window.addEventListener("wheel", handleScroll, { passive: false });
     window.addEventListener("touchstart", handleTouchStart);
     window.addEventListener("touchend", handleTouchEnd);
@@ -66,7 +71,7 @@ const MainPage = () => {
       window.removeEventListener("touchstart", handleTouchStart);
       window.removeEventListener("touchend", handleTouchEnd);
     };
-  }, [activeSection, isScrolling]);
+  }, [handleScroll, handleTouchStart, handleTouchEnd]);
 
   return (
     <div className="h-screen overflow-hidden">

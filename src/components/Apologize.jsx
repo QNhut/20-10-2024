@@ -3,7 +3,7 @@ import { useLottie } from "lottie-react";
 
 const APOLOGIZE_SENTENCES = [
   "😢 Xin lỗi vì đã quạo với em, mốt hong vậy nữa đâu.",
-  "😢 Em đừng có ăn hiệp anh nữa, la anh hoài lun.",
+  "😢 Em đừng có ăn hiếp anh nữa, la anh hoài lun.",
   "♥️ Thương em nhiều!",
 ];
 const Apologize = () => {
