@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "be-vietnam-pro";
+  src: local("be-vietnam-pro"), url(/be-vietnam-pro.woff2) format("woff");
+}
+
+body {
+  font-family: "Inter", sans-serif;
+}
