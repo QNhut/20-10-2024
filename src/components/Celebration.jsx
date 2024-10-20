@@ -3,8 +3,8 @@ import { useLottie } from "lottie-react";
 
 const CELEBRATION_SENTENCES = [
   "💯 Gọi em là 20/10 vì em luôn tuyệt vời gấp đôi thang điểm 10!",
-  "💚 Chúc em luôn xinh đẹp, luôn mạnh mẽ, luôn ngoan hiền và luôn tươi vui.",
-  "💚 Chúc em luôn hạnh phúc hôm nay, ngày mai và những ngày sau nữa.",
+  "💚 Chúc bé luôn xinh đẹp vui tươi mỗi ngày và lun là cục cưng của anh.",
+  "💚 Chúc bé một ngày 20/10 dù anh biết bây h cũng muộn lắm r.",
 ];
 
 const Celebration = () => {

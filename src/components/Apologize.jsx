@@ -2,9 +2,8 @@ import sorrryAnimation from "../assets/sorry.json";
 import { useLottie } from "lottie-react";
 
 const APOLOGIZE_SENTENCES = [
-  "😢 Xin lỗi vì đã quạo với em, mốt hong vậy nữa đâu.",
-  "😢 Em đừng có ăn hiếp anh nữa, la anh hoài lun.",
-  "♥️ Thương em nhiều!",
+  "♥️ Hôm nay anh không có thời gian để qua bé để bé một mình.",
+  "♥️ Mọi thứ sẽ ổn và khi anh có thời gian rãnh thì anh sẽ qua em và nói cho em nghe những điều mà anh muốn nói.",
 ];
 const Apologize = () => {
   const { View } = useLottie({
